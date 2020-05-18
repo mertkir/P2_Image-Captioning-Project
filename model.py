@@ -23,10 +23,36 @@ class EncoderCNN(nn.Module):
 
 class DecoderRNN(nn.Module):
     def __init__(self, embed_size, hidden_size, vocab_size, num_layers=1):
-        pass
+        super().__init__()
+        self.embed_size = embed_size
+        self.hidden_size = hidden_size
+        self.vocab_size = vocab_size
+        self.num_layers = num_layers
+        
+        self.embed = nn.Embedding(vocab_size, embed_size)
+        self.lstm = nn.LSTM(self.embed_size, self.hidden_size, self.num_layers, dropout = 0, batch_first=True)
+        
+        self.fc = nn.Linear(self.hidden_size, self.vocab_size)
+        
+        self.init_weights()
+        
+    def init_weights(self):
+        ''' Initialize weights for fully connected layer '''
+        initrange = 0.1
+        
+        # Set bias tensor to all zeros
+        self.fc.bias.data.fill_(0)
+        # FC weights as random uniform
+        self.fc.weight.data.uniform_(-1, 1)
     
     def forward(self, features, captions):
-        pass
+        captions = captions[:, :-1]
+        captions = self.embed(captions)
+        inputs = torch.cat((features.unsqueeze(1), captions), dim=1)
+        outputs, _ = self.lstm(inputs)
+        outputs = self.fc(outputs)
+        
+        return outputs
 
     def sample(self, inputs, states=None, max_len=20):
         " accepts pre-processed image tensor (inputs) and returns predicted sentence (list of tensor ids of length max_len) "

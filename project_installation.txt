@@ -1,0 +1,38 @@
+cd /home/workspace
+git clone https://github.com/cocodataset/cocoapi.git  
+
+
+cd cocoapi/PythonAPI  
+make  
+cd ..
+
+
+ln -s /home/workspace/cocoapi /opt/cocoapi
+
+
+wget -P /home/backups/cocoapi/annotations/ http://images.cocodataset.org/annotations/annotations_trainval2014.zip
+unzip -n /home/backups/cocoapi/annotations/annotations_trainval2014.zip -d /home/backups/cocoapi/
+
+wget  -P /home/backups/cocoapi/annotations/ http://images.cocodataset.org/annotations/image_info_test2014.zip
+unzip -n /home/backups/cocoapi/annotations/image_info_test2014.zip -d /home/backups/cocoapi/
+
+
+wget -P /home/backups/cocoapi/images/ http://images.cocodataset.org/zips/train2014.zip
+unzip -n /home/backups/cocoapi/images/train2014.zip -d /home/backups/cocoapi/images/
+
+wget -P /home/backups/cocoapi/images/ http://images.cocodataset.org/zips/val2014.zip
+unzip -n /home/backups/cocoapi/images/val2014.zip -d /home/backups/cocoapi/images/
+
+wget -P /home/backups/cocoapi/images/ http://images.cocodataset.org/zips/test2014.zip
+unzip -n /home/backups/cocoapi/images/test2014.zip -d /home/backups/cocoapi/images/
+
+
+ln -s /home/backups/cocoapi/annotations /home/workspace/cocoapi/annotations
+ln -s /home/backups/cocoapi/images /home/workspace/cocoapi/images
+
+
+
+# -- DO NOT CHANGE THIS CELL -- #
+!mkdir /data
+!wget -P /data/ https://s3.amazonaws.com/video.udacity-data.com/topher/2018/May/5aea1b91_train-test-data/train-test-data.zip
+!unzip -n /data/train-test-data.zip -d /data
